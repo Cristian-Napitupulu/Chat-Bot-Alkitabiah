@@ -139,6 +139,9 @@
             // Add user's message to the chat
             addMessage(prompt, 'user-message');
 
+            // Clear input field
+            promptInput.value = '';
+
             // Record start time
             const startTime = performance.now();
 
@@ -158,8 +161,7 @@
             // Add bot's response with processing time to the chat
             addMessage(responseData + ` (Processing time: ${processingTime.toFixed(2)} ms)`, 'bot-message');
 
-            // Clear input field
-            promptInput.value = '';
+            
         });
 
         function addMessage(message, className) {
