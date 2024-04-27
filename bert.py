@@ -36,7 +36,7 @@ print (categories)
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 
-bert_asli=0
+bert_asli=1
 
 if (bert_asli==1):
 	nama_model = 'bert-base-uncased'
