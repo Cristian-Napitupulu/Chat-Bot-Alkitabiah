@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatBot Alkitabiah</title>
+
+    <title>Chat Bot Alkitabiah</title>
+
     <style>
         /* Simple styling for the chat interface */
         body,
@@ -12,6 +14,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            background-color: #0B141B;
         }
 
         .container {
@@ -31,7 +34,7 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #f9f9f9;
+            background-color: #51686E;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             /* Height set by flex-grow */
@@ -43,16 +46,17 @@
             border-radius: 5px;
             position: relative;
             white-space: pre-wrap;
+            color: white;
         }
 
         .user-message {
-            background-color: #b9eea2;
+            background-color: #005D4B;
             text-align: right;
             /* white-space: pre-wrap; */
         }
 
         .bot-message {
-            background-color: #82b6ee;
+            background-color: #1F2C34;
             text-align: left;
             /* white-space: pre-wrap; */
         }
@@ -68,13 +72,13 @@
 
         .user-message::before {
             border-width: 10px 10px 10px 10px;
-            border-color: #b9eea2 transparent transparent transparent;
+            border-color: #005D4B transparent transparent transparent;
             right: -10px;
         }
 
         .bot-message::before {
             border-width: 10px 10px 10px 10px;
-            border-color: #82b6ee transparent transparent transparent;
+            border-color: #1F2C34 transparent transparent transparent;
             left: -10px;
         }
 
@@ -105,14 +109,24 @@
             border: 1px solid #ccc;
             margin-right: 10px;
             overflow-y: auto;
+            color: white;
+            background-color: #1F2C34;
             /* Enable vertical scrolling */
         }
+
+        #prompt:focus {
+            outline: none;
+            /* Remove the default focus outline */
+            border-color: initial;
+            /* Set the border color to initial, which will use the default border color */
+        }
+
 
         #submit-btn {
             padding: 8px 20px;
             border-radius: 5px;
             border: none;
-            background-color: #4CAF50;
+            background-color: #20BF63;
             color: white;
             cursor: pointer;
         }
@@ -125,7 +139,7 @@
 
 <body>
     <div class="container">
-        <h1 style="text-align: center;">Chat Bot Alkitabiah</h1>
+        <h1 style="text-align: center; color: white;">Chat Bot Alkitabiah</h1>
         <div class="chat-container" id="chat-container">
             <!-- Messages will be dynamically added here -->
 
@@ -136,7 +150,6 @@
                 <button type="submit" id="submit-btn">Send</button>
             </form>
         </div>
-
     </div>
 
     <script>
