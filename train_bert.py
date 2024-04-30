@@ -1,65 +1,46 @@
 import numpy as np
 import pandas as pd
 import json
-
+import torch
 from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
-import torch
+from sklearn.preprocessing import LabelEncoder
 
-# specify GPU
-# device = torch.device("cuda")
-# Check if GPU is available
+# Check GPU availability
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
+print("Using device: " + str(device))
 
-# We have prepared a chitchat dataset with 5 labels
+# Read dataset
 df = pd.read_excel("./dataset/patterns_and_tags.xlsx")
 df = df[df['tag'] != "no-response"]
-print (df.head())
+print(df.head())
 
-# buat sedemikian rupa sehingga untuk setiap label terdapat sekitar 100 buah
-print (df['tag'].value_counts())
+# Ensure approximately 100 instances for each label
+print(df['tag'].value_counts())
 
-# Converting the labels into encodings
-from sklearn.preprocessing import LabelEncoder
+# Encode labels
 le = LabelEncoder()
 df['label'] = le.fit_transform(df['tag'])
 
-# check class distribution
-print (df['label'].value_counts(normalize = True))
+# Check class distribution
+print(df['label'].value_counts(normalize=True))
 
 categories = np.unique(list(df['tag']))
-print (categories)
+print(categories)
 
-# Convert categories to Python list
+# Save label list to JSON
 categories_list = categories.tolist()
 with open('./dataset/label_list.json', 'w') as file:
     json.dump(categories_list, file, indent=4)
 print("JSON file created successfully.")
 
-# In this example we have used all the utterances for training purpose
+# Prepare data for training
 train_text, train_labels = list(df['text']), list(df['label'])
-# for text in train_text:
-#     try:
-#         print("Text: "+ text +" \t Type: ", type(text))
-#     except:
-#         print(text)
-#         pass
-# print (train_labels)
 
-#-------------------------------------------------
-
-# Split the dataset into training and validation sets
+# Split dataset into training and validation sets
 train_texts, val_texts, train_labels, val_labels = train_test_split(
     train_text, train_labels, random_state=42, test_size=0.2
 )
-
-print (type(train_texts))
-print (type(val_texts))
-
-#import sys
-#sys.exit()
-
 
 # Load BERT tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -110,7 +91,6 @@ trainer.train()
 output_dir = "./fine_tuned_chatbot-bert_model"
 model.save_pretrained(output_dir)
 
-
-print ()
-print ("Model ", output_dir, " was saved ....")
-print ("Selesai ...")
+print()
+print("Model", output_dir, "was saved.")
+print("Finished.")

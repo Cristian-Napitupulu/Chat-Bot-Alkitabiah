@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Chat Bot Alkitabiah</title>
-
     <style>
         /* Simple styling for the chat interface */
         body,
@@ -16,17 +13,13 @@
             padding: 0;
             background-color: #0B141B;
         }
-
         .container {
             display: flex;
             flex-direction: column;
             height: 100%;
             width: 80%;
-            /* Set the fixed width */
-            margin: 0 auto;
-            /* Center the container horizontally */
+            margin: 0 auto; /* Center the container horizontally */
         }
-
         .chat-container {
             flex: 1;
             min-width: 80%;
@@ -36,10 +29,8 @@
             border-radius: 5px;
             background-color: #51686E;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            /* Height set by flex-grow */
+            overflow-y: auto; /* Height set by flex-grow */
         }
-
         .message {
             margin-bottom: 10px;
             padding: 10px;
@@ -48,19 +39,14 @@
             white-space: pre-wrap;
             color: white;
         }
-
         .user-message {
             background-color: #005D4B;
             text-align: right;
-            /* white-space: pre-wrap; */
         }
-
         .bot-message {
             background-color: #1F2C34;
             text-align: left;
-            /* white-space: pre-wrap; */
         }
-
         .message::before {
             content: '';
             position: absolute;
@@ -69,41 +55,33 @@
             border-style: solid;
             top: 0;
         }
-
         .user-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #005D4B transparent transparent transparent;
             right: -10px;
         }
-
         .bot-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #1F2C34 transparent transparent transparent;
             left: -10px;
         }
-
         /* Style for the input form */
         .prompt-container {
             display: flex;
             flex-direction: column;
             min-width: 100%;
-            /* justify-content: center; */
             margin: 0 auto;
             padding: 5px;
         }
-
         #message-form {
             margin-top: 15px;
             text-align: center;
             margin-bottom: 25px;
-            /* Added margin to separate from the chat container */
         }
-
         #prompt {
             flex: 1;
             min-width: 67%;
             height: 50px;
-            /* Set a fixed height */
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -111,17 +89,11 @@
             overflow-y: auto;
             color: white;
             background-color: #1F2C34;
-            /* Enable vertical scrolling */
         }
-
         #prompt:focus {
             outline: none;
-            /* Remove the default focus outline */
             border-color: initial;
-            /* Set the border color to initial, which will use the default border color */
         }
-
-
         #submit-btn {
             padding: 8px 20px;
             border-radius: 5px;
@@ -130,20 +102,15 @@
             color: white;
             cursor: pointer;
         }
-
         #submit-btn:hover {
             background-color: #008a07;
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <h1 style="text-align: center; color: white;">Chat Bot Alkitabiah</h1>
-        <div class="chat-container" id="chat-container">
-            <!-- Messages will be dynamically added here -->
-
-        </div>
+        <div class="chat-container" id="chat-container"></div>
         <div class="prompt-container">
             <form id="message-form">
                 <input type="text" id="prompt" name="prompt" placeholder="Tulis pesan disini..." required>
@@ -151,65 +118,44 @@
             </form>
         </div>
     </div>
-
     <script>
-        const promptInput = document.getElementById('prompt');
-
-        promptInput.addEventListener('input', function (event) {
-            const maxLength = 250; // Maximum character limit
-            const currentLength = this.value.length;
-
-            if (currentLength > maxLength) {
-                this.value = this.value.slice(0, maxLength); // Truncate the input
+        document.addEventListener('DOMContentLoaded', function () {
+            const promptInput = document.getElementById('prompt');
+            promptInput.addEventListener('input', function () {
+                const maxLength = 250; // Maximum character limit
+                if (this.value.length > maxLength) {
+                    this.value = this.value.slice(0, maxLength); // Truncate the input
+                }
+            });
+            const chatContainer = document.getElementById('chat-container');
+            const messageForm = document.getElementById('message-form');
+            messageForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const promptInput = document.getElementById('prompt');
+                const prompt = promptInput.value.trim();
+                if (!prompt) return;
+                addMessage(prompt, 'user-message');
+                promptInput.value = ''; // Clear input field
+                const startTime = performance.now(); // Record start time
+                const formData = new FormData();
+                formData.append('prompt', prompt);
+                const response = await fetch('/get_response', {
+                    method: 'POST',
+                    body: formData
+                });
+                const responseData = await response.text();
+                const endTime = performance.now(); // Record end time
+                const processingTime = endTime - startTime; // Calculate processing time
+                addMessage(responseData + ` (Processing time: ${processingTime.toFixed(2)} ms)`, 'bot-message');
+            });
+            function addMessage(message, className) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messageElement.classList.add('message', className);
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom of the chat
             }
         });
-
-        const chatContainer = document.getElementById('chat-container');
-        const messageForm = document.getElementById('message-form');
-
-        messageForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const promptInput = document.getElementById('prompt');
-            const prompt = promptInput.value.trim();
-            if (!prompt) return;
-
-            // Add user's message to the chat
-            addMessage(prompt, 'user-message');
-
-            // Clear input field
-            promptInput.value = '';
-
-            // Record start time
-            const startTime = performance.now();
-
-            // Send prompt to the server and get response
-            const formData = new FormData();
-            formData.append('prompt', prompt);
-            const response = await fetch('/get_response', {
-                method: 'POST',
-                body: formData
-            });
-            const responseData = await response.text();
-
-            // Calculate processing time
-            const endTime = performance.now();
-            const processingTime = endTime - startTime;
-
-            // Add bot's response with processing time to the chat
-            addMessage(responseData + ` (Processing time: ${processingTime.toFixed(2)} ms)`, 'bot-message');
-        });
-
-
-        function addMessage(message, className) {
-            const messageElement = document.createElement('div');
-            messageElement.textContent = message;
-            messageElement.classList.add('message', className);
-            chatContainer.appendChild(messageElement);
-
-            // Scroll to the bottom of the chat
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
     </script>
 </body>
-
 </html>
