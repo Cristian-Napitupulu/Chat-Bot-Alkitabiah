@@ -1,2 +1,5 @@
 /dataset/
 *venv/
+/test_trainer/
+/__pycache__/
+/fine_tuned_chatbot-bert_model/

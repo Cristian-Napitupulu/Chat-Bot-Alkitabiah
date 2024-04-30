@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatBot Alkitabiah</title>
     <style>
         /* Simple styling for the chat interface */
-        body, html {
+        body,
+        html {
             height: 100%;
             margin: 0;
             padding: 0;
         }
+
         .container {
             display: flex;
             flex-direction: column;
             height: 100%;
-            width: 80%; /* Set the fixed width */
-            margin: 0 auto; /* Center the container horizontally */
+            width: 80%;
+            /* Set the fixed width */
+            margin: 0 auto;
+            /* Center the container horizontally */
         }
+
         .chat-container {
             flex: 1;
             min-width: 80%;
@@ -30,21 +36,28 @@
             overflow-y: auto;
             /* Height set by flex-grow */
         }
+
         .message {
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 5px;
             position: relative;
+            white-space: pre-wrap;
         }
+
         .user-message {
             background-color: #b9eea2;
             text-align: right;
+            /* white-space: pre-wrap; */
         }
+
         .bot-message {
             background-color: #82b6ee;
             text-align: left;
+            /* white-space: pre-wrap; */
         }
-        .message::before{
+
+        .message::before {
             content: '';
             position: absolute;
             width: 0;
@@ -52,16 +65,19 @@
             border-style: solid;
             top: 0;
         }
+
         .user-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #b9eea2 transparent transparent transparent;
             right: -10px;
         }
+
         .bot-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #82b6ee transparent transparent transparent;
             left: -10px;
         }
+
         /* Style for the input form */
         .prompt-container {
             display: flex;
@@ -71,21 +87,27 @@
             margin: 0 auto;
             padding: 5px;
         }
+
         #message-form {
             margin-top: 15px;
             text-align: center;
-            margin-bottom: 25px; /* Added margin to separate from the chat container */
+            margin-bottom: 25px;
+            /* Added margin to separate from the chat container */
         }
+
         #prompt {
             flex: 1;
             min-width: 67%;
-            height: 50px; /* Set a fixed height */
+            height: 50px;
+            /* Set a fixed height */
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-right: 10px;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
         }
+
         #submit-btn {
             padding: 8px 20px;
             border-radius: 5px;
@@ -94,17 +116,19 @@
             color: white;
             cursor: pointer;
         }
+
         #submit-btn:hover {
             background-color: #008a07;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 style="text-align: center;">Chat Bot Alkitabiah</h1>
         <div class="chat-container" id="chat-container">
             <!-- Messages will be dynamically added here -->
-            
+
         </div>
         <div class="prompt-container">
             <form id="message-form">
@@ -112,13 +136,13 @@
                 <button type="submit" id="submit-btn">Send</button>
             </form>
         </div>
-        
+
     </div>
 
     <script>
         const promptInput = document.getElementById('prompt');
 
-        promptInput.addEventListener('input', function(event) {
+        promptInput.addEventListener('input', function (event) {
             const maxLength = 250; // Maximum character limit
             const currentLength = this.value.length;
 
@@ -126,11 +150,11 @@
                 this.value = this.value.slice(0, maxLength); // Truncate the input
             }
         });
-        
+
         const chatContainer = document.getElementById('chat-container');
         const messageForm = document.getElementById('message-form');
 
-        messageForm.addEventListener('submit', async function(event) {
+        messageForm.addEventListener('submit', async function (event) {
             event.preventDefault();
             const promptInput = document.getElementById('prompt');
             const prompt = promptInput.value.trim();
@@ -160,9 +184,8 @@
 
             // Add bot's response with processing time to the chat
             addMessage(responseData + ` (Processing time: ${processingTime.toFixed(2)} ms)`, 'bot-message');
-
-            
         });
+
 
         function addMessage(message, className) {
             const messageElement = document.createElement('div');
@@ -175,4 +198,5 @@
         }
     </script>
 </body>
+
 </html>

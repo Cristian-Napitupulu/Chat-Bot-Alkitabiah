@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import json
 
 from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
@@ -9,29 +10,42 @@ import torch
 # device = torch.device("cuda")
 # Check if GPU is available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(device)
 
 # We have prepared a chitchat dataset with 5 labels
-df = pd.read_excel("chitchat.xlsx")
+df = pd.read_excel("./dataset/patterns_and_tags.xlsx")
+df = df[df['tag'] != "no-response"]
 print (df.head())
 
 # buat sedemikian rupa sehingga untuk setiap label terdapat sekitar 100 buah
-print (df['labelx'].value_counts())
+print (df['tag'].value_counts())
 
 # Converting the labels into encodings
 from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
-df['label'] = le.fit_transform(df['labelx'])
+df['label'] = le.fit_transform(df['tag'])
 
 # check class distribution
 print (df['label'].value_counts(normalize = True))
 
-categories = np.unique(list(df['labelx']))
+categories = np.unique(list(df['tag']))
 print (categories)
+
+# Convert categories to Python list
+categories_list = categories.tolist()
+with open('./dataset/label_list.json', 'w') as file:
+    json.dump(categories_list, file, indent=4)
+print("JSON file created successfully.")
 
 # In this example we have used all the utterances for training purpose
 train_text, train_labels = list(df['text']), list(df['label'])
-
-print (train_labels)
+# for text in train_text:
+#     try:
+#         print("Text: "+ text +" \t Type: ", type(text))
+#     except:
+#         print(text)
+#         pass
+# print (train_labels)
 
 #-------------------------------------------------
 
@@ -72,13 +86,13 @@ train_dataset = PyTorchDataset(train_encodings, train_labels)
 val_dataset = PyTorchDataset(val_encodings, val_labels)
 
 # Fine-tune a pre-trained BERT model
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(categories))
+model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=len(categories), ignore_mismatched_sizes=True)
 
 training_args = TrainingArguments(
     output_dir="test_trainer",
-    per_device_train_batch_size=4,
-    per_device_eval_batch_size=4,
-    num_train_epochs=3,
+    per_device_train_batch_size=5,
+    per_device_eval_batch_size=5,
+    num_train_epochs=200,
     logging_dir='./logs',
 )
 
