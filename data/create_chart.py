@@ -10,6 +10,9 @@ data_path = script_path + data_folder
 
 images_path = script_path + images_folder
 
+if not os.path.exists(images_path):
+    os.makedirs(images_path)
+
 print(script_path)
 print(data_path)
 print(images_path)

@@ -10,8 +10,12 @@ def load_json(file_path):
     with open(file_path, 'r') as file:
         return json.load(file)
 
-def save_json(data, file_path):
-    with open(file_path, 'w') as file:
+def save_json(data, file_path, save_name):
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+
+    save_path = os.path.join(file_path, save_name)
+    with open(save_path, 'w') as file:
         json.dump(data, file, indent=4)
 
 def filter_intents_by_count(intents, lower_cut_off, upper_cut_off):
@@ -23,7 +27,7 @@ print("Script directory:", script_dir)
 print("Data directory:", script_dir + intents_folder)
 
 # Load the JSON data
-original_data = load_json(os.path.join(script_dir + intents_folder, intents_filename))
+original_data = load_json(os.path.join(script_dir, intents_filename))
 
 # Create a dictionary to store the count of patterns for each tag
 patterns_count = {intent['tag']: len(intent['patterns']) for intent in original_data['intents']}
@@ -41,8 +45,7 @@ new_data['intents'] = filter_intents_by_count(original_data['intents'], lower_cu
 json.dumps(new_data, indent=4)
 
 # Save the updated JSON data to a file
-save_json(new_data, os.path.join(script_dir + intents_folder, 'new_intents.json'))
-
+save_json(new_data, script_dir + intents_folder, 'new_intents.json')
 print("Number of tags left:", len(new_data['intents']))
 
 # Extract patterns and tags
@@ -56,7 +59,7 @@ test_pattern = random.sample(patterns, 5)
 
 print(test_pattern)
 
-save_json(test_pattern, os.path.join(script_dir + intents_folder, 'test_patterns.json'))
+save_json(test_pattern, script_dir + intents_folder, 'test_patterns.json')
 
 # Create a DataFrame
 df = pd.DataFrame({'text': patterns, 'tag': tags})

@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from transformers import BertTokenizer, BertForSequenceClassification
 import json
 import os
+from torchinfo import summary
 
 # Get the current directory
 current_directory = os.getcwd()
@@ -50,8 +51,6 @@ max_seq_len = 8
 model = model.to(device)
 
 # Summarize the model
-from torchinfo import summary
-
 summary(model)
 
 # Load label list from JSON
