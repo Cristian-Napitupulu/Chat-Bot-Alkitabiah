@@ -3,3 +3,6 @@
 /test_trainer/
 /__pycache__/
 /fine_tuned_chatbot-bert_model/
+/logs/
+*.zip
+/data/wikitext-103/
