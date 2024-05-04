@@ -8,10 +8,9 @@ from sklearn.preprocessing import LabelEncoder
 
 # Check GPU availability
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print("Using device: " + str(device))
 
 # Read dataset
-df = pd.read_excel("./dataset/patterns_and_tags.xlsx")
+df = pd.read_excel("./data/intents/patterns_and_tags.xlsx")
 df = df[df['tag'] != "no-response"]
 print(df.head())
 
@@ -30,7 +29,7 @@ print(categories)
 
 # Save label list to JSON
 categories_list = categories.tolist()
-with open('./dataset/label_list.json', 'w') as file:
+with open('./data/intents/label_list.json', 'w') as file:
     json.dump(categories_list, file, indent=4)
 print("JSON file created successfully.")
 
@@ -84,6 +83,7 @@ trainer = Trainer(
     eval_dataset=val_dataset,
 )
 
+print("Using device: " + str(device))
 # Train the model
 trainer.train()
 

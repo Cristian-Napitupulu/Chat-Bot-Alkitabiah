@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-import src.bert as bert
+import bert
 
 app = Flask(__name__)
 

@@ -1,8 +1,15 @@
 /dataset/
 *venv/
 /test_trainer/
-/__pycache__/
+*__pycache__/
 /fine_tuned_chatbot-bert_model/
 /logs/
 *.zip
 /data/wikitext-103/
+/data/gambar/
+
+data/intents/label_list.json
+data/intents/new_intents.json
+data/intents/olah_intents.xlsx
+data/intents/patterns_and_tags.xlsx
+data/intents/test_patterns.json

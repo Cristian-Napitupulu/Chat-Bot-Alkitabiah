@@ -6,9 +6,16 @@ import torch.nn as nn
 from sklearn.preprocessing import LabelEncoder
 from transformers import BertTokenizer, BertForSequenceClassification
 import json
+import os
+
+# Get the current directory
+current_directory = os.getcwd()
+
+# Navigate one folder back
+parent_directory = os.path.dirname(current_directory)
 
 # Load intents data from JSON
-with open("./dataset/new_intents.json", "r") as file:
+with open("./data/intents/new_intents.json", "r") as file:
     data = json.load(file)
 
 # Check for GPU availability
@@ -48,7 +55,7 @@ from torchinfo import summary
 summary(model)
 
 # Load label list from JSON
-with open("./dataset/label_list.json", "r") as file:
+with open("./data/intents/label_list.json", "r") as file:
     label_list = json.load(file)
 
 # Convert labels into encodings
@@ -100,7 +107,7 @@ def get_response(message):
 
 
 # Load test questions from JSON
-with open("./dataset/test_pattern.json", "r") as file:
+with open("./data/intents/test_patterns.json", "r") as file:
     test_questions = json.load(file)
 
 for question in test_questions:
