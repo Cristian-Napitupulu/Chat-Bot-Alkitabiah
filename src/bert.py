@@ -19,15 +19,17 @@ parent_directory = os.path.dirname(current_directory)
 with open("./data/intents/new_intents.json", "r") as file:
     data = json.load(file)
 
+# Extract tags from intents
+tags = [intent["tag"] for intent in data["intents"]]
+categories = np.unique(tags)
+# print(categories)
+
 # Check for GPU availability
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 device_ = "GPU" if str(device) == "cuda" else "CPU"
 
-# Extract tags from intents
-tags = [intent["tag"] for intent in data["intents"]]
-categories = np.unique(tags)
-print(categories)
+
 
 # Load BERT tokenizer
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
@@ -51,16 +53,7 @@ max_seq_len = 8
 model = model.to(device)
 
 # Summarize the model
-summary(model)
-
-# Load label list from JSON
-with open("./data/intents/label_list.json", "r") as file:
-    label_list = json.load(file)
-
-# Convert labels into encodings
-le = LabelEncoder()
-encoded_labels = le.fit_transform(label_list)
-
+# summary(model)
 
 def get_prediction(text):
     cleaned_text = re.sub(r"[^a-zA-Z ]+", "", text)
@@ -104,16 +97,16 @@ def get_response(message):
         + str(device_)
     )
 
+if __name__ == "__main__":
+    # Load test questions from JSON
+    with open("./data/intents/test_patterns.json", "r") as file:
+        test_questions = json.load(file)
 
-# Load test questions from JSON
-with open("./data/intents/test_patterns.json", "r") as file:
-    test_questions = json.load(file)
+    for question in test_questions:
+        print()
+        print(f"Question: {question}")
+        print(get_response(question))
+        print()
+        print("-------------------------")
 
-for question in test_questions:
-    print()
-    print(f"Question: {question}")
-    print(get_response(question))
-    print()
-    print("-------------------------")
-
-print("Finished...")
+    print("Finished...")
