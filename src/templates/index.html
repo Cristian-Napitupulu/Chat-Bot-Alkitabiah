@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,13 +14,16 @@
             padding: 0;
             background-color: #0B141B;
         }
+
         .container {
             display: flex;
             flex-direction: column;
             height: 100%;
             width: 80%;
-            margin: 0 auto; /* Center the container horizontally */
+            margin: 0 auto;
+            /* Center the container horizontally */
         }
+
         .chat-container {
             flex: 1;
             min-width: 80%;
@@ -29,8 +33,10 @@
             border-radius: 5px;
             background-color: #51686E;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto; /* Height set by flex-grow */
+            overflow-y: auto;
+            /* Height set by flex-grow */
         }
+
         .message {
             margin-bottom: 10px;
             padding: 10px;
@@ -39,14 +45,17 @@
             white-space: pre-wrap;
             color: white;
         }
+
         .user-message {
             background-color: #005D4B;
             text-align: right;
         }
+
         .bot-message {
             background-color: #1F2C34;
             text-align: left;
         }
+
         .message::before {
             content: '';
             position: absolute;
@@ -55,16 +64,19 @@
             border-style: solid;
             top: 0;
         }
+
         .user-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #005D4B transparent transparent transparent;
             right: -10px;
         }
+
         .bot-message::before {
             border-width: 10px 10px 10px 10px;
             border-color: #1F2C34 transparent transparent transparent;
             left: -10px;
         }
+
         /* Style for the input form */
         .prompt-container {
             display: flex;
@@ -73,11 +85,13 @@
             margin: 0 auto;
             padding: 5px;
         }
+
         #message-form {
             margin-top: 15px;
             text-align: center;
             margin-bottom: 25px;
         }
+
         #prompt {
             flex: 1;
             min-width: 67%;
@@ -90,10 +104,12 @@
             color: white;
             background-color: #1F2C34;
         }
+
         #prompt:focus {
             outline: none;
             border-color: initial;
         }
+
         #submit-btn {
             padding: 8px 20px;
             border-radius: 5px;
@@ -102,11 +118,13 @@
             color: white;
             cursor: pointer;
         }
+
         #submit-btn:hover {
             background-color: #008a07;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 style="text-align: center; color: white;">Chat Bot Alkitabiah</h1>
@@ -127,6 +145,7 @@
                     this.value = this.value.slice(0, maxLength); // Truncate the input
                 }
             });
+
             const chatContainer = document.getElementById('chat-container');
             const messageForm = document.getElementById('message-form');
             messageForm.addEventListener('submit', async function (event) {
@@ -145,9 +164,10 @@
                 });
                 const responseData = await response.text();
                 const endTime = performance.now(); // Record end time
-                const processingTime = endTime - startTime; // Calculate processing time
+                const processingTime = (endTime - startTime); // Calculate processing time in microseconds
                 addMessage(responseData + ` (Processing time: ${processingTime.toFixed(2)} ms)`, 'bot-message');
             });
+            
             function addMessage(message, className) {
                 const messageElement = document.createElement('div');
                 messageElement.textContent = message;
@@ -158,4 +178,5 @@
         });
     </script>
 </body>
+
 </html>

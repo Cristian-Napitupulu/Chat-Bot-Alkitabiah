@@ -8,6 +8,7 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import json
 import os
 from torchinfo import summary
+import time
 
 # Get the current directory
 current_directory = os.getcwd()
@@ -24,11 +25,22 @@ tags = [intent["tag"] for intent in data["intents"]]
 categories = np.unique(tags)
 # print(categories)
 
-# Check for GPU availability
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+gpu_name = "cuda:0"
+# Choose device for prediction
+device_name = input("Enter device to use for prediction (CPU or GPU): ").strip().upper()
+if device_name == "GPU" and torch.cuda.is_available():
+    device = "cuda:0"
+elif device_name == "GPU" and not torch.cuda.is_available():
+    print("No GPU detected. Using CPU instead.")
+    device = "cpu"
+    time.sleep(2)
+else:
+    device = "cpu"
 
-device_ = "GPU" if str(device) == "cuda" else "CPU"
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# print(device)
 
+device_ = "GPU" if str(device) == gpu_name else "CPU"
 
 
 # Load BERT tokenizer
@@ -53,15 +65,18 @@ max_seq_len = 8
 model = model.to(device)
 
 # Summarize the model
-# summary(model)
+summary(model)
+
 
 def get_prediction(text):
+    print("Using: " + str(device).upper())
     cleaned_text = re.sub(r"[^a-zA-Z ]+", "", text)
 
     # Tokenize input text
     inputs = tokenizer(
         cleaned_text, padding=True, truncation=True, return_tensors="pt"
     ).to(device)
+    print(inputs)
 
     # Perform inference
     with torch.no_grad():
@@ -94,8 +109,9 @@ def get_response(message):
         + "\nResponse: "
         + response
         + "\n\nUsing device: "
-        + str(device_)
+        + str(device_).upper()
     )
+
 
 if __name__ == "__main__":
     # Load test questions from JSON

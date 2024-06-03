@@ -4,7 +4,10 @@
 /fine_tuned_chatbot-bert_model/
 /logs/
 *.zip
+
 /data/wikitext-103/
 /data/gambar/
+/data/intents/
 
-data/intents/
+/neural_network_chatbot_model/
+*test*
