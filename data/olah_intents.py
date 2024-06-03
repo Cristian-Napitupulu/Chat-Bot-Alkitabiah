@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import os
 import random
+import openpyxl
 
 intents_folder = "/intents"
 intents_filename = "intents.json"
