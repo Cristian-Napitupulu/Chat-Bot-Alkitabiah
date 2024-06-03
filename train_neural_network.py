@@ -2,10 +2,10 @@ import json
 import numpy as np
 import os
 import tensorflow as tf
-from tensorflow.keras.models import Sequential # type: ignore
-from tensorflow.keras.layers import Dense, Dropout # type: ignore
-from tensorflow.keras.preprocessing.text import Tokenizer # type: ignore
-from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
+from tensorflow.keras.models import Sequential  # type: ignore
+from tensorflow.keras.layers import Dense, Dropout  # type: ignore
+from tensorflow.keras.preprocessing.text import Tokenizer  # type: ignore
+from tensorflow.keras.preprocessing.sequence import pad_sequences  # type: ignore
 from sklearn.preprocessing import LabelEncoder
 import pickle
 
@@ -53,7 +53,7 @@ def create_model(input_shape, num_classes):
 
 model = create_model(padded_sequences.shape[1], num_classes)
 model.summary()
-model.fit(padded_sequences, categorical_tags, epochs=200, verbose=1)
+model.fit(padded_sequences, categorical_tags, epochs=500, verbose=1)
 
 # Save the model and tokenizers
 model.save(os.path.join(current_directory, "neural_network_chatbot_model/intent_model.h5"))

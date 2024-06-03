@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
+import os
 import bert
 import neural_network
+
+# os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
+using_bert = False
 
 app = Flask(__name__)
 
@@ -11,8 +16,10 @@ def index():
 @app.route("/get_response", methods=["POST"])
 def get_response():
     prompt = request.form["prompt"]
-    response = bert.get_response(prompt)
-    # response = neural_network.get_response(prompt)
+    if using_bert:
+        response = bert.get_response(prompt)
+    else:
+        response = neural_network.get_response(prompt)
     return response
 
 

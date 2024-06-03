@@ -30,7 +30,7 @@ cpu_name = "/CPU:0"
 # else:
 #     device = cpu_name
 
-device = gpu_name if len(tf.config.list_physical_devices("GPU")) > 0 else cpu_name
+device = gpu_name if tf.config.list_physical_devices("GPU") else cpu_name
 
 device_ = "GPU" if str(device) == gpu_name else "CPU"
 
@@ -62,7 +62,7 @@ def get_response(message):
         if intent_data["tag"] == intent:
             response = random.choice(intent_data["responses"])
             break
-    return f"Intent: {intent}\nResponse: {response}\n\nUsing device: {device_}"
+    return f"Intent: {intent}\nResponse: {response}\n\nModel: Neural Network \nDevice: {device_}"
 
 
 if __name__ == "__main__":
