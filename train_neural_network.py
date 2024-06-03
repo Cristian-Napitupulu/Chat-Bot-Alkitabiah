@@ -53,13 +53,18 @@ def create_model(input_shape, num_classes):
 
 model = create_model(padded_sequences.shape[1], num_classes)
 model.summary()
-model.fit(padded_sequences, categorical_tags, epochs=500, verbose=1)
+model.fit(padded_sequences, categorical_tags, epochs=5, verbose=1)
 
+output_dir = "./neural_network_chatbot_model"
 # Save the model and tokenizers
-model.save(os.path.join(current_directory, "neural_network_chatbot_model/intent_model.h5"))
+model.save(os.path.join(current_directory, output_dir +"/intent_model.h5"))
 
-with open(os.path.join(current_directory, 'neural_network_chatbot_model/tokenizer.pickle'), 'wb') as handle:
+with open(os.path.join(current_directory,  output_dir +'/tokenizer.pickle'), 'wb') as handle:
     pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-with open(os.path.join(current_directory, 'neural_network_chatbot_model/label_encoder.pickle'), 'wb') as handle:
+with open(os.path.join(current_directory, output_dir +'/label_encoder.pickle'), 'wb') as handle:
     pickle.dump(label_encoder, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+print()
+print("Model", output_dir, "was saved.")
+print("Finished.")
