@@ -72,7 +72,7 @@ training_args = TrainingArguments(
     output_dir="test_trainer",
     per_device_train_batch_size=5,
     per_device_eval_batch_size=5,
-    num_train_epochs=5,
+    num_train_epochs=50,
     logging_dir='./logs',
 )
 

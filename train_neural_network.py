@@ -53,7 +53,7 @@ def create_model(input_shape, num_classes):
 
 model = create_model(padded_sequences.shape[1], num_classes)
 model.summary()
-model.fit(padded_sequences, categorical_tags, epochs=5, verbose=1)
+model.fit(padded_sequences, categorical_tags, epochs=500, verbose=1)
 
 output_dir = "./neural_network_chatbot_model"
 # Save the model and tokenizers
