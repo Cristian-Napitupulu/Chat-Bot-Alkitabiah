@@ -11,3 +11,5 @@
 
 /neural_network_chatbot_model/
 *test*
+
+*.docx
